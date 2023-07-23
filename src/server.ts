@@ -36,9 +36,3 @@ async function bootstrap() {
 }
 
 bootstrap();
-
-process.on("SIGTERM", () => {
-    if (server) {
-        server.close();
-    }
-});
