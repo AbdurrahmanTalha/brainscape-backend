@@ -18,3 +18,17 @@ export const createUserValidationSchema = z.object({
         profilePicture: z.string().optional(),
     }),
 });
+
+export const updateUserValidationSchema = z.object({
+    body: z.object({
+        name: z
+            .object({
+                firstName: z.string().optional(),
+                middleName: z.string().optional(),
+                lastName: z.string().optional(),
+            })
+            .optional(),
+        contact: z.string().optional(),
+        profilePicture: z.string().optional(),
+    }),
+});

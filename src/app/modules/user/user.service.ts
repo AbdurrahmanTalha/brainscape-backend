@@ -28,4 +28,55 @@ const createStudentService = async (user: IUser): Promise<IUser> => {
     return newUserData;
 };
 
-export default { createStudentService };
+const myProfileService = async (userId: string): Promise<IUser> => {
+    const user = await User.findById(userId).select({ password: 0 });
+    if (!user) {
+        throw new ApiError(httpStatus.NOT_FOUND, "User not found!");
+    }
+    return user;
+};
+
+const updatedProfileService = async (
+    userId: string,
+    userData: Partial<IUser>
+): Promise<IUser> => {
+    const user = await User.findByIdAndUpdate(userId, userData);
+    if (!user) {
+        throw new ApiError(httpStatus.NOT_FOUND, "User not found!");
+    }
+    return user;
+};
+
+export default {
+    createStudentService,
+    myProfileService,
+    updatedProfileService,
+};
+
+/*
+const updateUser = async (
+  id: string,
+  payload: Partial<IUser>
+): Promise<IUser | null> => {
+  const isExist = await User.findOne({ id });
+
+  if (!isExist) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Student not found !');
+  }
+
+  const { name, ...userData } = payload;
+
+  const updatedUserData: Partial<IUser> = { ...userData };
+
+  if (name && Object.keys(name).length > 0) {
+    Object.keys(name).forEach(key => {
+      const nameKey = `name.${key}` as keyof Partial<IStudent>;
+      (updatedStudentData as any)[nameKey] = name[key as keyof typeof name];
+    });
+  }
+  const result = await User.findOneAndUpdate({ id }, updatedUserData, {
+    new: true,
+  });
+  return result;
+};
+*/
