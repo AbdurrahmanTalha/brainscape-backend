@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import mongoose from "mongoose";
 
 export type IName = {
@@ -11,11 +12,19 @@ export type IUser = {
     email: string;
     password: string;
     role: "student" | "teacher" | "admin";
-    contact: string;
+    contact?: string;
     profilePicture: string;
     student?: mongoose.Types.ObjectId;
     teacher?: mongoose.Types.ObjectId;
     admin?: mongoose.Types.ObjectId;
 };
 
-export type UserModel = mongoose.Model<IUser, Record<string, unknown>>;
+export type UserModel = {
+    isUserExist(
+        email: string
+    ): Promise<Pick<IUser, "email" | "password" | "role">>;
+    isPasswordMatched(
+        givenPassword: string,
+        savedPassword: string
+    ): Promise<boolean>;
+} & mongoose.Model<IUser>;

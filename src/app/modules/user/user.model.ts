@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import { IUser, UserModel } from "./user.interface";
+import bcrypt from "bcrypt";
+import config from "../../../config";
 
 const userSchema = new mongoose.Schema<IUser, UserModel>(
     {
@@ -34,7 +36,7 @@ const userSchema = new mongoose.Schema<IUser, UserModel>(
         },
         contact: {
             type: String,
-            required: true,
+            required: false,
         },
         profilePicture: {
             type: String,
@@ -55,6 +57,33 @@ const userSchema = new mongoose.Schema<IUser, UserModel>(
     },
     { timestamps: true, versionKey: false }
 );
+
+userSchema.statics.isUserExist = async function (
+    email: string
+): Promise<IUser | null> {
+    return await User.findOne(
+        { email: email },
+        { _id: 1, password: 1, role: 1 }
+    );
+};
+
+userSchema.statics.isPasswordMatched = async function (
+    givenPassword: string,
+    savedPassword: string
+): Promise<boolean> {
+    return await bcrypt.compare(givenPassword, savedPassword);
+};
+
+userSchema.pre("save", async function (next) {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const user = this;
+    user.password = await bcrypt.hash(
+        user.password,
+        Number(config.bcrypt_salt_rounds)
+    );
+
+    next();
+});
 
 const User = mongoose.model<IUser, UserModel>("User", userSchema);
 
