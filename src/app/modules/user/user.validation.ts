@@ -18,3 +18,12 @@ export const createUserValidationSchema = z.object({
         profilePicture: z.string().optional(),
     }),
 });
+
+/*
+{
+    name: {
+        firstNamee: ""
+    }
+}
+
+*/
