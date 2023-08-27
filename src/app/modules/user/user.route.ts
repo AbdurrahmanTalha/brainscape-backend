@@ -14,6 +14,7 @@ router.post(
     controller.createStudent
 );
 router.get("/my-profile/:id", controller.getMyProfile);
+
 router.patch(
     "/:id",
     validateRequest(updateUserValidationSchema),
