@@ -16,5 +16,6 @@ export const createCourseValidation = z.object({
                 message: "Invalid URL",
             }),
         category: z.string({ required_error: "Category is required" }),
+        title: z.string({ required_error: "title is required" }),
     }),
 });

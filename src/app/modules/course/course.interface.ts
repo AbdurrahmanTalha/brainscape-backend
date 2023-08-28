@@ -14,6 +14,11 @@ export type ICourse = {
     description: string;
     image: string;
     status: "Public" | "Private";
+    title: string;
 };
 
 export type CourseModel = mongoose.Model<ICourse, Record<string, unknown>>;
+
+export type ICourseFilters = {
+    searchTerm?: string;
+};

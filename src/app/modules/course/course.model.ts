@@ -40,6 +40,10 @@ const courseSchema = new mongoose.Schema<ICourse, CourseModel>(
             required: true,
             enum: ["Public", "Private"],
         },
+        title: {
+            type: String,
+            required: true,
+        },
     },
     { timestamps: true, versionKey: false }
 );
