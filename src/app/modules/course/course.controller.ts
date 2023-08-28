@@ -71,7 +71,7 @@ const removeSection = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
-const getCourses = async (req: Request, res: Response) => {
+const getCourses = catchAsync(async (req: Request, res: Response) => {
     const filters = pick(req.query, coursesFilterableFields);
     const paginationOptions = pick(req.query, paginationFields);
 
@@ -84,7 +84,18 @@ const getCourses = async (req: Request, res: Response) => {
         meta: result.meta,
         data: result.data,
     });
-};
+});
+
+const updateCourse = catchAsync(async (req: Request, res: Response) => {
+    const result = await service.updateCourseService(req.params.id, req.body);
+
+    sendResponse<ICourse>(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Successfully updated course",
+        data: result,
+    });
+});
 
 export default {
     createCourse,
@@ -92,4 +103,5 @@ export default {
     removeSection,
     getCourse,
     getCourses,
+    updateCourse,
 };

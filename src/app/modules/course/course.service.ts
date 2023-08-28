@@ -100,6 +100,10 @@ const getCoursesService = async (
         });
     }
 
+    andConditions.push({
+        status: "Public",
+    });
+
     // Dynamic sort needs  fields to  do sorting
     const sortConditions: { [key: string]: SortOrder } = {};
     if (sortBy && sortOrder) {
@@ -127,10 +131,32 @@ const getCoursesService = async (
     };
 };
 
+const updateCourseService = async (
+    id: string,
+    payload: Partial<ICourse>
+): Promise<ICourse | null> => {
+    const isExist = await Course.findById(id);
+
+    if (!isExist) {
+        throw new ApiError(httpStatus.NOT_FOUND, "Course not found!");
+    }
+
+    const result = await Course.findOneAndUpdate({ _id: id }, payload, {
+        new: true,
+    });
+
+    if (!result) {
+        return null;
+    }
+
+    return result.toObject();
+};
+
 export default {
     createCourseService,
     addSectionService,
     removeSectionService,
     getCourseService,
     getCoursesService,
+    updateCourseService,
 };

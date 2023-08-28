@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.get("/", controller.getCourses);
 router.get("/:id", controller.getCourse);
+router.patch("/:id", controller.updateCourse);
 router.post(
     "/create-course",
     validateRequest(createCourseValidation),
