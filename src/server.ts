@@ -13,6 +13,7 @@ let server: Server;
 
 async function bootstrap() {
     try {
+        // database connection
         await mongoose.connect(config.database_url as string);
         console.log(`🛢   Database is connected successfully`);
 
