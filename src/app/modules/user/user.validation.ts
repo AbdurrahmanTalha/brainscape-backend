@@ -14,7 +14,7 @@ export const createUserValidationSchema = z.object({
                 required_error: "Role is Required",
             })
             .default("student"),
-        contact: z.string({ required_error: "Contact Number is required" }),
+        contact: z.string().optional(),
         profilePicture: z.string().optional(),
     }),
 });
