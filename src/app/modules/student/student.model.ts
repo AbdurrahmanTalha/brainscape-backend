@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import { IStudent } from "./student.interface";
+import { IStudent, StudentModel } from "./student.interface";
 
-const StudentSchema = new mongoose.Schema<IStudent>(
+const StudentSchema = new mongoose.Schema<IStudent, StudentModel>(
     {
         courses: [
             {
@@ -24,6 +24,9 @@ const StudentSchema = new mongoose.Schema<IStudent>(
     }
 );
 
-const StudentModel = mongoose.model<IStudent>("Student", StudentSchema);
+const Student = mongoose.model<IStudent, StudentModel>(
+    "Student",
+    StudentSchema
+);
 
-export default StudentModel;
+export default Student;

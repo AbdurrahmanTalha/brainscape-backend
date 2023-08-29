@@ -6,7 +6,10 @@ import { IStudent } from "./student.interface";
 import httpStatus from "http-status";
 
 const joinCourse = catchAsync(async (req: Request, res: Response) => {
-    const courseJoin = await service.joinCourseService(req.params.id);
+    const courseJoin = await service.joinCourseService(
+        req.params.id,
+        req.params.courseId
+    );
 
     sendResponse<IStudent>(res, {
         success: true,

@@ -3,6 +3,7 @@ import { IUser } from "./user.interface";
 import User from "./user.model";
 import httpStatus from "http-status";
 import ApiError from "../../../errors/ApiError";
+import Student from "../student/student.model";
 
 const createStudentService = async (user: IUser): Promise<IUser> => {
     user.role = "student";
@@ -10,7 +11,19 @@ const createStudentService = async (user: IUser): Promise<IUser> => {
     let newUserData = null;
     try {
         session.startTransaction();
+        const newStudent = await Student.create(
+            [
+                {
+                    courses: [],
+                    recommendCourses: [],
+                    dailyStreak: [],
+                },
+            ],
+            { session }
+        );
+        user.student = newStudent[0]._id;
         const newUser = await User.create([user], { session });
+
         if (!newUser || newUser.length === 0) {
             throw new ApiError(
                 httpStatus.BAD_REQUEST,
