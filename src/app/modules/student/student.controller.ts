@@ -19,7 +19,10 @@ const joinCourse = catchAsync(async (req: Request, res: Response) => {
     });
 });
 const leaveCourse = catchAsync(async (req: Request, res: Response) => {
-    const courseLeave = await service.leaveCourseService(req.params.id);
+    const courseLeave = await service.leaveCourseService(
+        req.params.id,
+        req.params.courseId
+    );
 
     sendResponse<IStudent>(res, {
         success: true,

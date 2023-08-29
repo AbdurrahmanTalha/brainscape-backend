@@ -39,12 +39,38 @@ const joinCourseService = async (
     return result;
 };
 
-const leaveCourseService = async (studentId: string): Promise<IStudent> => {
-    const student = await Student.findById(studentId);
-    if (!student) {
-        throw new ApiError(httpStatus.NOT_FOUND, "Student not found!");
+const leaveCourseService = async (
+    userId: string,
+    courseId: string
+): Promise<IStudent> => {
+    const user = await User.findById(userId);
+
+    if (!user) {
+        throw new ApiError(httpStatus.NOT_FOUND, "User not found!");
     }
-    return student;
+
+    const course = await Course.findById(courseId);
+    if (!course) {
+        throw new ApiError(httpStatus.NOT_FOUND, "Course not found");
+    }
+
+    const obj = { courseId: courseId };
+    const result = await Student.findByIdAndUpdate(
+        user.student,
+        {
+            $pull: {
+                courses: obj,
+            },
+        },
+        {
+            new: true,
+        }
+    );
+    if (!result) {
+        throw new ApiError(httpStatus.NOT_FOUND, "Failed to join course");
+    }
+
+    return result;
 };
 
 export default { joinCourseService, leaveCourseService };
