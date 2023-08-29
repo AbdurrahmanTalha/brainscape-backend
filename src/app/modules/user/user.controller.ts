@@ -17,4 +17,28 @@ const createStudent = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
-export default { createStudent };
+const getMyProfile = catchAsync(async (req: Request, res: Response) => {
+    const user = await service.myProfileService(req.params.id);
+    sendResponse<IUser>(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Successfully fetched user",
+        data: user,
+    });
+});
+
+const updateProfile = catchAsync(async (req: Request, res: Response) => {
+    const updateData = req.body;
+    const updatedProfile = await service.updatedProfileService(
+        req.params.id,
+        updateData
+    );
+    sendResponse<IUser>(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Successfully updated profile",
+        data: updatedProfile,
+    });
+});
+
+export default { createStudent, getMyProfile, updateProfile };
