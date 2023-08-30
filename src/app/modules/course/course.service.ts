@@ -25,8 +25,8 @@ const addSectionService = async (
         courseId,
         {
             $push: {
-                quizzes: {
-                    title,
+                sections: {
+                    section: title,
                     quiz: [],
                 },
             },

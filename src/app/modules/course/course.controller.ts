@@ -30,7 +30,7 @@ const createCourse = catchAsync(async (req: Request, res: Response) => {
 });
 
 const addSection = catchAsync(async (req: Request, res: Response) => {
-    if (!req.params.courseId || !req.params.id) {
+    if (!req.params.courseId || !req.params.title) {
         throw new ApiError(
             httpStatus.NOT_FOUND,
             "Either CourseId or Title doesn't exist"

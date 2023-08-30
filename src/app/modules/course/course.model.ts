@@ -1,28 +1,25 @@
 import mongoose from "mongoose";
 import { CourseModel, ICourse } from "./course.interface";
 
-const quizSchema = new mongoose.Schema({
-    quiz: {
-        type: String,
-        required: true,
-    },
-    index: {
-        type: Number,
-        required: true,
-    },
-});
-
 const courseSchema = new mongoose.Schema<ICourse, CourseModel>(
     {
         category: {
             type: String,
             required: true,
         },
-        quizzes: {
+        sections: {
             type: [
                 {
-                    title: { type: String },
-                    quiz: [quizSchema],
+                    section: {
+                        type: String,
+                        required: true,
+                    },
+                    quiz: [
+                        {
+                            type: mongoose.Schema.Types.ObjectId,
+                            ref: "quiz",
+                        },
+                    ],
                 },
             ],
             required: true,

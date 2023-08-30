@@ -10,7 +10,10 @@ export type IQuizzes = {
 
 export type ICourse = {
     category: string;
-    quizzes: IQuizzes[];
+    sections: {
+        section: string;
+        quiz: mongoose.Types.ObjectId[];
+    }[];
     description: string;
     image: string;
     status: "Public" | "Private";
