@@ -13,7 +13,7 @@ router.post(
     validateRequest(createCourseValidation),
     controller.createCourse
 );
-router.post("/add-section/:courseId/:id", controller.addSection);
+router.post("/add-section/:courseId/:title", controller.addSection);
 router.delete("/remove-section/:courseId/:id", controller.removeSection);
 
 export default router;

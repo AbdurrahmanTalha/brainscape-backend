@@ -25,8 +25,8 @@ const addSectionService = async (
         courseId,
         {
             $push: {
-                quizzes: {
-                    title,
+                sections: {
+                    section: title,
                     quiz: [],
                 },
             },
@@ -115,6 +115,7 @@ const getCoursesService = async (
         andConditions.length > 0 ? { $and: andConditions } : {};
 
     const result = await Course.find(whereConditions)
+        .select("-sections")
         .sort(sortConditions)
         .skip(skip)
         .limit(limit);
