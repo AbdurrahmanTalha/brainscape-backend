@@ -117,7 +117,8 @@ const getCoursesService = async (
     const result = await Course.find(whereConditions)
         .sort(sortConditions)
         .skip(skip)
-        .limit(limit);
+        .limit(limit)
+        .populate("sections.quiz");
 
     const total = await Course.countDocuments(whereConditions);
 

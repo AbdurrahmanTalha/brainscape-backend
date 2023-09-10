@@ -1,23 +1,18 @@
 import mongoose from "mongoose";
-
-export type IQuizzes = {
-    title: string;
-    quiz: Array<{
-        quiz: string;
-        index: number;
-    }>;
-};
+import { IQuiz } from "../quiz/quiz.interface";
 
 export type ICourse = {
     category: string;
     sections: {
         section: string;
-        quiz: mongoose.Types.ObjectId[];
+        quiz: IQuiz[];
+        _id: mongoose.Types.ObjectId;
     }[];
     description: string;
     image: string;
     status: "Public" | "Private";
     title: string;
+    _id: mongoose.Types.ObjectId;
 };
 
 export type CourseModel = mongoose.Model<ICourse, Record<string, unknown>>;

@@ -20,4 +20,20 @@ const createQuiz = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
-export default { createQuiz };
+const addQuestion = catchAsync(async (req: Request, res: Response) => {
+    const result = await service.addQuestionsService(
+        req.params.courseId,
+        req.params.sectionId,
+        req.params.quizId,
+        req.body
+    );
+
+    sendResponse<ICourse>(res, {
+        statusCode: httpStatus.OK,
+        message: "Successfully added question",
+        data: result,
+        success: true,
+    });
+});
+
+export default { createQuiz, addQuestion };

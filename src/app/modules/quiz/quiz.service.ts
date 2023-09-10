@@ -1,17 +1,15 @@
 import httpStatus from "http-status";
 import { ICourse } from "../course/course.interface";
 import Course from "../course/course.model";
-import { IQuiz } from "./quiz.interface";
-import Quiz from "./quiz.model";
+import { IQuestion, IQuiz } from "./quiz.interface";
 import ApiError from "../../../errors/ApiError";
+import mongoose from "mongoose";
 
 const createQuizService = async (
     courseId: string,
     sectionId: string,
     data: IQuiz
 ): Promise<ICourse> => {
-    const quiz = await Quiz.create(data);
-
     const result = await Course.findOneAndUpdate(
         {
             _id: courseId,
@@ -19,13 +17,13 @@ const createQuizService = async (
         },
         {
             $push: {
-                "sections.$.quiz": quiz._id,
+                "sections.$.quiz": data,
             },
         },
         {
             new: true,
         }
-    ).populate("sections.quiz");
+    );
 
     if (!result) {
         throw new ApiError(
@@ -37,4 +35,64 @@ const createQuizService = async (
     return result;
 };
 
-export default { createQuizService };
+const addQuestionsService = async (
+    courseId: string,
+    sectionId: string,
+    quizId: string,
+    data: IQuestion
+) => {
+    const course = await Course.findById(courseId);
+    if (!course || !course.sections) {
+        throw new ApiError(httpStatus.NOT_FOUND, "Failed to find course");
+    }
+
+    const section = course.sections.find(
+        section => section._id.toString() === sectionId
+    );
+    let newIndex = 0;
+
+    if (section) {
+        const quiz = section.quiz.find(quiz => quiz._id.toString() === quizId);
+
+        if (quiz) {
+            newIndex = quiz.questions.length;
+        } else {
+            throw new ApiError(httpStatus.NOT_FOUND, "Failed to find section");
+        }
+    } else {
+        throw new ApiError(httpStatus.NOT_FOUND, "Failed to find section");
+    }
+
+    const newQuestion: IQuestion = {
+        ...data,
+        index: newIndex,
+    };
+
+    const result = await Course.findOneAndUpdate(
+        {
+            _id: courseId,
+            "sections._id": sectionId,
+            "sections.quiz._id": quizId,
+        },
+        {
+            $push: {
+                "sections.$[section].quiz.$[quiz].questions": newQuestion,
+            },
+        },
+        {
+            new: true,
+            arrayFilters: [
+                {
+                    "section._id": new mongoose.Types.ObjectId(sectionId),
+                },
+                {
+                    "quiz._id": new mongoose.Types.ObjectId(quizId),
+                },
+            ],
+        }
+    );
+
+    return result;
+};
+
+export default { createQuizService, addQuestionsService };
