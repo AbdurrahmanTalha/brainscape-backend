@@ -4,6 +4,7 @@ import sendResponse from "../../../shared/sendResponse";
 import { ICourse } from "../course/course.interface";
 import service from "./quiz.service";
 import { Request, Response } from "express";
+import { IQuiz } from "./quiz.interface";
 
 const createQuiz = catchAsync(async (req: Request, res: Response) => {
     const result = await service.createQuizService(
@@ -36,4 +37,19 @@ const addQuestion = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
-export default { createQuiz, addQuestion };
+const getSpecificQuiz = catchAsync(async (req: Request, res: Response) => {
+    const result = await service.getSpecificQuizService(
+        req.params.courseId,
+        req.params.sectionId,
+        req.params.quizId
+    );
+
+    sendResponse<IQuiz>(res, {
+        statusCode: httpStatus.OK,
+        message: "Successfully added question",
+        data: result,
+        success: true,
+    });
+});
+
+export default { createQuiz, addQuestion, getSpecificQuiz };

@@ -1,9 +1,9 @@
 import httpStatus from "http-status";
 import { ICourse } from "../course/course.interface";
-import Course from "../course/course.model";
 import { IQuestion, IQuiz } from "./quiz.interface";
 import ApiError from "../../../errors/ApiError";
 import mongoose from "mongoose";
+import Course from "../course/course.model";
 
 const createQuizService = async (
     courseId: string,
@@ -40,7 +40,7 @@ const addQuestionsService = async (
     sectionId: string,
     quizId: string,
     data: IQuestion
-) => {
+): Promise<ICourse> => {
     const course = await Course.findById(courseId);
     if (!course || !course.sections) {
         throw new ApiError(httpStatus.NOT_FOUND, "Failed to find course");
@@ -57,7 +57,7 @@ const addQuestionsService = async (
         if (quiz) {
             newIndex = quiz.questions.length;
         } else {
-            throw new ApiError(httpStatus.NOT_FOUND, "Failed to find section");
+            throw new ApiError(httpStatus.NOT_FOUND, "Failed to find quiz");
         }
     } else {
         throw new ApiError(httpStatus.NOT_FOUND, "Failed to find section");
@@ -92,7 +92,48 @@ const addQuestionsService = async (
         }
     );
 
+    if (!result) {
+        throw new ApiError(httpStatus.BAD_REQUEST, "Failed to create question");
+    }
+
     return result;
 };
 
-export default { createQuizService, addQuestionsService };
+const getSpecificQuizService = async (
+    courseId: string,
+    sectionId: string,
+    quizId: string
+): Promise<IQuiz> => {
+    const course = await Course.findOne({
+        _id: courseId,
+        "sections._id": sectionId,
+        "sections.quiz._id": quizId,
+    });
+    if (!course) {
+        throw new ApiError(httpStatus.NOT_FOUND, "Failed to find course");
+    }
+
+    let result;
+
+    if (course && course.sections) {
+        const section = course.sections.find(
+            section => section._id.toString() === sectionId
+        );
+
+        if (section && section.quiz) {
+            result = section.quiz.find(quiz => quiz._id.toString() === quizId);
+        }
+    }
+
+    if (!result) {
+        throw new ApiError(httpStatus.NOT_FOUND, "Quiz not Found");
+    }
+
+    return result;
+};
+
+export default {
+    createQuizService,
+    addQuestionsService,
+    getSpecificQuizService,
+};

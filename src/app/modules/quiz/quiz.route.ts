@@ -8,5 +8,6 @@ router.post(
     "/addQuestion/:courseId/:sectionId/:quizId",
     controller.addQuestion
 );
+router.get("/:courseId/:sectionId/:quizId", controller.getSpecificQuiz);
 
 export default router;

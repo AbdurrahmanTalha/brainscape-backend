@@ -115,10 +115,10 @@ const getCoursesService = async (
         andConditions.length > 0 ? { $and: andConditions } : {};
 
     const result = await Course.find(whereConditions)
+        .select("-sections")
         .sort(sortConditions)
         .skip(skip)
-        .limit(limit)
-        .populate("sections.quiz");
+        .limit(limit);
 
     const total = await Course.countDocuments(whereConditions);
 
