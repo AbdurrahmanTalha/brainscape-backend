@@ -4,6 +4,7 @@ import userRouter from "../modules/user/user.route";
 import courseRouter from "../modules/course/course.route";
 import studentRouter from "../modules/student/student.route";
 import quizRouter from "../modules/quiz/quiz.route";
+import teacherRouter from "../modules/teacher/teacher.route";
 
 type IRoute = {
     path: string;
@@ -32,6 +33,10 @@ const routes: IRoute[] = [
     {
         path: "/quiz",
         router: quizRouter,
+    },
+    {
+        path: "/teacher",
+        router: teacherRouter,
     },
 ];
 
