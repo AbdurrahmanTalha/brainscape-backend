@@ -30,7 +30,10 @@ const createStudentService = async (user: IUser): Promise<IUser> => {
                 "Failed to create user!"
             );
         }
-        newUserData = newUser[0];
+        // You can exclude the password field here
+        newUserData = newUser[0].toObject();
+        delete newUserData.password;
+
         await session.commitTransaction();
         await session.endSession();
     } catch (error) {
