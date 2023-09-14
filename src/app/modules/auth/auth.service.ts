@@ -13,20 +13,20 @@ import { jwtHelpers } from "../../../helpers/jwtHelpers";
 const loginUser = async (payload: ILoginUser): Promise<ILoginUserResponse> => {
     const { email, password } = payload;
 
-    const isUserExist = await User.isUserExist(email);
+    const user = await User.isUserExist(email);
 
-    if (!isUserExist) {
+    if (!user) {
         throw new ApiError(httpStatus.NOT_FOUND, "User does not exist");
     }
 
     if (
-        isUserExist.password &&
-        !(await User.isPasswordMatched(password, isUserExist.password))
+        user.password &&
+        !(await User.isPasswordMatched(password, user.password))
     ) {
         throw new ApiError(httpStatus.UNAUTHORIZED, "Password is incorrect");
     }
 
-    const { role } = isUserExist;
+    const { role } = user;
     const accessToken = jwtHelpers.createToken(
         { email, role },
         config.jwt.secret as Secret,
@@ -39,9 +39,11 @@ const loginUser = async (payload: ILoginUser): Promise<ILoginUserResponse> => {
         config.jwt.refresh_expires_in as string
     );
 
+    delete user.password;
     return {
         accessToken,
         refreshToken,
+        user,
     };
 };
 

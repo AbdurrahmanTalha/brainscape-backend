@@ -10,7 +10,7 @@ export type IName = {
 export type IUser = {
     name: IName;
     email: string;
-    password: string;
+    password?: string;
     role: "student" | "teacher" | "admin";
     contact?: string;
     profilePicture: string;
