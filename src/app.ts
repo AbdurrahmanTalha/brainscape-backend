@@ -17,7 +17,7 @@ const corsOptions = {
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true, // Enable cookies and authorization headers
 };
-
+// asdasdas hellooooo
 app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.json());
