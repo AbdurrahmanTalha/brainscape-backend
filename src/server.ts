@@ -3,7 +3,7 @@ import { Server } from "http";
 import mongoose from "mongoose";
 import app from "./app";
 import config from "./config/index";
-
+// testtttt
 process.on("uncaughtException", error => {
     console.log(error); // Jenkins Test
     process.exit(1);
@@ -36,3 +36,4 @@ async function bootstrap() {
 }
 
 bootstrap();
+// testing jenkins
