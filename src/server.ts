@@ -3,7 +3,7 @@ import { Server } from "http";
 import mongoose from "mongoose";
 import app from "./app";
 import config from "./config/index";
-// testttttasdasdaasdas
+// testttttasdasdaasdas asdasdas dasda/sdasdansdasudnasud
 process.on("uncaughtException", error => {
     console.log(error); // Jenkins Test
     process.exit(1);
