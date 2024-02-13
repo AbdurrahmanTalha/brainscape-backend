@@ -5,7 +5,7 @@ import app from "./app";
 import config from "./config/index";
 // testttttasdasdaasdas asdasdas dasda/sdasdansdasasdasdasdudnasud
 process.on("uncaughtException", error => {
-    console.log(error); // Jenkins Test
+    console.log(error); // 
     process.exit(1);
 });
 
