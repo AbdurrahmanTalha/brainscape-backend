@@ -1,11 +1,11 @@
 /* eslint-disable no-console */
 import { Server } from "http";
 import mongoose from "mongoose";
-import app from "./app"; // asdasdasd asdnausdog4ift43ift43t
+import app from "./app"; 
 import config from "./config/index";
-// testttttasdasdaasdas asdasdas dasda/sdasdansdasasdasdasdudnasud
+
 process.on("uncaughtException", error => {
-    console.log(error); // 
+    console.log(error);  
     process.exit(1);
 });
 
@@ -14,7 +14,7 @@ let server: Server;
 async function bootstrap() {
     try {
         await mongoose.connect(config.database_url as string);
-        console.log(`🛢   Database is connected successfully`);
+        console.log(`🛢   Database has been connected successfully`);
 
         server = app.listen(config.port, () => {
             console.log(`Application  listening on port ${config.port}`);
@@ -36,4 +36,3 @@ async function bootstrap() {
 }
 
 bootstrap();
-// testing jenkins
