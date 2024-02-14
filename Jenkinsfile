@@ -1,21 +1,41 @@
 pipeline {
-  agent any
-  stages {
-    stage('stage 1') {
-      steps {
-        echo 'Hello'
-      }
-    }
+    agent any
+    
+    stages {
+        stage('Delete Existing Folder') {
+            steps {
+                sh 'rm -rf brainscape-backend || true'
+            }
+        }
+        
+        stage('Clone Repository') {
+            steps {
+                sh "git clone 'https://github.com/AbdurrahmanTalha/brainscape-backend.git'"
+            }
+        }
+        
+        stage('Install dependencies') {
+            steps {
+                dir('brainscape-backend') {
+                    sh 'npm install'
+                }
+            }
+        }
+        
+        stage('Building') {
+            steps {
+                dir('brainscape-backend') {
+                    sh 'npm run build'
+                }
+            }
+        }
 
-  }
-  environment {
-    NODE_ENV = 'development'
-    PORT = '3000'
-    DATABASE_URL = 'mongodb+srv://admin:Ra5zAryED964hUy5@cluster0.grlseth.mongodb.net/brainscape'
-    BCRYPT_SALT_ROUNDS = '12'
-    JWT_SECRET = '54321'
-    JWT_REFRESH_SECRET = 'asdasd'
-    JWT_EXPIRES_IN = '1d'
-    JWT_REFRESH_EXPIRES_IN = '1yr'
-  }
+        stage('Start') {
+            steps {
+                dir('brainscape-backend') {
+                    sh 'npm run start'
+                }
+            }
+        }
+    }
 }

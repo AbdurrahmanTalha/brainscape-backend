@@ -23,6 +23,14 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.get("/", (req: Request, res: Response) => {
+    res.status(httpStatus.OK).json({
+        success: true,
+        message: "This is brainscape backend",
+        statusCode: httpStatus.OK,
+    });
+});
+
 app.use("/api/v1", routes);
 app.use(globalErrorHandler);
 
