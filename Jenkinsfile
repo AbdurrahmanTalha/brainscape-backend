@@ -40,7 +40,7 @@ pipeline {
                     } else {
                         echo "No containers with the name brainscape-backend found."
                     }
-                    sh "docker rmi brainscape-backend || true"
+                    sh "docker rmi -f brainscape-backend || true"
                 }
             }
         }
