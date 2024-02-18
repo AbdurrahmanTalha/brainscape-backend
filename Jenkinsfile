@@ -32,13 +32,19 @@ pipeline {
 
         stage("Delete Image") {
             steps {
-                sh 'docker stop $(docker ps -a --filter name=brainscape-backend --format "{{.ID}}")'
-                
-                sh 'docker rm $(docker ps -a --filter name=brainscape-backend --format "{{.ID}}")'
-
-                sh "docker rmi brainscape-backend"
+                script {
+                    def containerIds = sh(script: 'docker ps -a --filter name=brainscape-backend --format "{{.ID}}"', returnStdout: true).trim()
+                    if (containerIds) {
+                        sh "docker stop $containerIds"
+                        sh "docker rm $containerIds"
+                    } else {
+                        echo "No containers with the name brainscape-backend found."
+                    }
+                    sh "docker rmi brainscape-backend || true"
+                }
             }
         }
+
 
         stage('Build Docker') {
             steps {
