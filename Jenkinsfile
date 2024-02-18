@@ -30,6 +30,16 @@ pipeline {
             }
         }
 
+        stage("Delete Image") {
+            steps {
+                sh 'docker stop $(docker ps -a --filter name=brainscape-backend --format "{{.ID}}")'
+                
+                sh 'docker rm $(docker ps -a --filter name=brainscape-backend --format "{{.ID}}")'
+
+                sh "docker rmi brainscape-backend"
+            }
+        }
+
         stage('Build Docker') {
             steps {
                 dir('brainscape-backend') {
