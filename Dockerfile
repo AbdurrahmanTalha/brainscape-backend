@@ -1,17 +1,15 @@
-FROM node:18-alphine
+FROM node:18-alpine
 
 WORKDIR /app
 
-RUN yarn install
-
-
-
-
 COPY . .
 
+RUN yarn install
 
- # Starting our application
-CMD [ "node", "index.js" ]
+COPY .env.example .env
 
-# Exposing server port
-EXPOSE 5000
+RUN yarn build
+
+EXPOSE 8000
+
+CMD ["yarn", "start"]
